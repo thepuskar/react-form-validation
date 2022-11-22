@@ -1,31 +1,45 @@
 #root {
   max-width: 1280px;
-  margin: 0 auto;
   padding: 2rem;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 form {
   padding: 0.5125em;
   border-radius: 0.4em;
   background-color: rgb(221, 221, 221);
   display: flex;
-  flex-direction:column;
-  width:15em
+  flex-direction: column;
+  width: 15em;
 }
 input {
   border: none;
-  outline: none;m  padding: 0.7em 0.5em;
-  border-ra  dius: 0.3em;;0in: 0.5e
-  margin:0.5em;
+  outline: none;
+  padding: 0.7em 0.5em;
+  border-radius: 0.3em;
+  margin: 0.5em;
 }
 
-button{
-  border:none;
-  outline: none;
-  background-color:7, 126, 236);
-  color:#ffff;
-  border-radius: 0.4em;
+span {
+  color: red;
+  font-size: 0.8em;
+  font-width: 400;
+  opacity: 0.7;
+  text-align: left;
+  padding: 0.1em 0.5em;
 }
-button:hover{
-  background-color:rgb(67, 126, 236;
+
+button {
+  border: none;
+  outline: none;
+  background-color: rgba(7, 126, 236);
+  color: #ffff;
+  border-radius: 0.4em;
+  padding: 0.7em;
+  cursor: pointer;
+  margin: 0.5em;
+}
+button:hover {
+  background-color: rgb(67, 126, 236);
 }

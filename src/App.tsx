@@ -1,8 +1,9 @@
 import './App.css'
-import { useForm } from './formValidation'
+import { useForm } from './hooks'
+import { Input } from './components/Input'
 
 function App() {
-  const onSubmit = (values:any) => {
+  const onSubmit = (values: any) => {
     console.log('data', values)
   }
   const { state, handleChange, handleSubmit } = useForm(onSubmit)
@@ -10,39 +11,36 @@ function App() {
   return (
     <div className='App'>
       <form onSubmit={handleSubmit}>
-        <input
-          value={state.input?.['fullName']}
-          onChange={handleChange}
+        <Input
+          handleChange={handleChange}
           type='text'
           name='fullName'
           placeholder='Full name'
+          state={state}
         />
-        <span className='validation-errors'>
-          {state.validationErrs?.['fullName']}
-        </span>
 
-        <input
-          onChange={handleChange}
-          value={state.input?.['username']}
+        <Input
+          handleChange={handleChange}
           type='text'
           name='username'
           placeholder='Username'
+          state={state}
         />
 
-        <input
-          onChange={handleChange}
-          value={state.input?.['email']}
+        <Input
+          handleChange={handleChange}
           type='email'
           name='email'
           placeholder='Email'
+          state={state}
         />
 
-        <input
-          onChange={handleChange}
-          value={state.input?.['password']}
+        <Input
+          handleChange={handleChange}
           type='password'
           name='password'
           placeholder='password'
+          state={state}
         />
 
         <button type='submit'>Submut</button>
