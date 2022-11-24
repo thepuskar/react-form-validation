@@ -3,13 +3,6 @@ import { useReducer, useEffect, FormEvent, ChangeEvent } from 'react'
 import { validateOnSubmit, validateOnTouch } from 'helpers'
 import { ACTION_TYPE, IFormData, IFormState, IAction } from 'interface'
 
-export const FORM_INITIAL_STATE: IFormData = {
-  fullName: '',
-  username: '',
-  email: '',
-  password: ''
-}
-
 const initState: IFormState = {
   input: {
     fullName: '',

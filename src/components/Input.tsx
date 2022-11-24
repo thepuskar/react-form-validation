@@ -9,7 +9,6 @@ interface IInputProps {
 }
 
 export const Input = (props: IInputProps) => {
-  console.log(props?.state)
   return (
     <div className='input-field'>
       <input
