@@ -3,7 +3,7 @@ import { ChangeEvent, FormEvent, useState } from 'react'
 interface IValidation {
   required?: {
     value: boolean
-    message?: string
+    message: string
   }
   pattern?: {
     value: string
@@ -46,21 +46,26 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
       for (const key in validations) {
         const value = data[key]
         const validation = validations[key]
-        if (validation?.required?.value && !value) {
-          valid = true
-          newErrors[key] = validation?.required?.message
+
+        const required = validation?.required
+        if (required?.value && !value) {
+          valid = false
+          newErrors[key] = required?.message
         }
+
         const pattern = validation?.pattern
         if (pattern?.value && !RegExp(pattern?.value).test(value)) {
           valid = false
           newErrors[key] = pattern.message
         }
+
         const custom = validation?.custom
         if (custom?.isValid && !custom?.isValid(value)) {
           valid = false
           newErrors[key] = custom.message
         }
       }
+
       if (!valid) {
         setErrors(newErrors)
         return

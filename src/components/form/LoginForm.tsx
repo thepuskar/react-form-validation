@@ -12,11 +12,11 @@ export const LoginForm = () => {
       password: {
         required: {
           value: true,
-          message: 'Password is required.'
+          message: 'This field is required'
         },
         custom: {
-          isValid: (value: string) => value?.length > 6,
-          message: 'The password needs to be at least 6 characters long.'
+          isValid: (value) => value?.length > 6,
+          message: 'The password needs to be atleast 6 characters long'
         }
       },
       email: {
