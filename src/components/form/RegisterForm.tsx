@@ -1,4 +1,4 @@
-import { useForm } from 'hooks'
+import { useStaticForm } from 'hooks'
 import { Input } from 'components'
 import { IFormData } from 'interface'
 
@@ -6,7 +6,7 @@ export const RegisterForm = () => {
   const onSubmit = (values: IFormData) => {
     console.log('data', values)
   }
-  const { state, handleChange, handleSubmit } = useForm(onSubmit)
+  const { state, handleChange, handleSubmit } = useStaticForm(onSubmit)
   return (
     <form onSubmit={(event) => handleSubmit(event)}>
       <Input

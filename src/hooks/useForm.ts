@@ -1,85 +1,81 @@
-import { useReducer, useEffect, FormEvent, ChangeEvent } from 'react'
+import { ChangeEvent, FormEvent, useState } from 'react'
 
-import { validateOnSubmit, validateOnTouch } from 'helpers'
-import { ACTION_TYPE, IFormData, IFormState, IAction } from 'interface'
-
-const initState: IFormState = {
-  input: {
-    fullName: '',
-    username: '',
-    email: '',
-    password: ''
-  },
-  validationError: {
-    fullName: '',
-    username: '',
-    email: '',
-    password: ''
-  },
-  isSubmiting: false
+interface IValidation {
+  required?: {
+    value: boolean
+    message?: string
+  }
+  pattern?: {
+    value: string
+    message: string
+  }
+  custom?: {
+    isValid: (value: string) => boolean
+    message: string
+  }
 }
 
-export const useForm = (callback: any) => {
-  const reducer = (state: IFormState, action: IAction): IFormState => {
-    switch (action?.type) {
-      case ACTION_TYPE?.INPUT_CHANGE:
-        return {
-          ...state,
-          input: {
-            ...state?.input,
-            ...action?.payload
-          },
-          validationError: {
-            ...state?.validationError,
-            ...validateOnTouch(state, action)
-          }
+type ErrorRecord<T> = Partial<Record<keyof T, string>>
+
+type Validations<T extends {}> = Partial<Record<keyof T, IValidation>>
+
+export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
+  validations?: Validations<T>
+  initialValues?: Partial<T>
+  onSubmit?: () => void
+}) => {
+  const [data, setData] = useState<T>((options?.initialValues || {}) as T)
+  const [errors, setErrors] = useState<ErrorRecord<T>>({})
+
+  const handleChange =
+    <S extends unknown>(key: keyof T, sanitizeFn?: (value: string) => S) =>
+    (e: ChangeEvent<HTMLInputElement & HTMLSelectElement>) => {
+      const value = sanitizeFn ? sanitizeFn(e.target.value) : e.target.value
+      setData({
+        ...data,
+        [key]: value
+      })
+    }
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const validations = options?.validations
+    if (validations) {
+      let valid = true
+      const newErrors: ErrorRecord<T> = {}
+      for (const key in validations) {
+        const value = data[key]
+        const validation = validations[key]
+        if (validation?.required?.value && !value) {
+          valid = true
+          newErrors[key] = validation?.required?.message
         }
-      case ACTION_TYPE?.SUBMIT:
-        return {
-          ...state,
-          validationError: {
-            ...validateOnSubmit(state)
-          },
-          isSubmiting: true
+        const pattern = validation?.pattern
+        if (pattern?.value && !RegExp(pattern?.value).test(value)) {
+          valid = false
+          newErrors[key] = pattern.message
         }
-      case ACTION_TYPE?.STOP_SUBMIT:
-        return {
-          ...state,
-          isSubmiting: false
+        const custom = validation?.custom
+        if (custom?.isValid && !custom?.isValid(value)) {
+          valid = false
+          newErrors[key] = custom.message
         }
-      default:
-        return state
+      }
+      if (!valid) {
+        setErrors(newErrors)
+        return
+      }
+    }
+    setErrors({})
+
+    if (options?.onSubmit) {
+      options?.onSubmit()
     }
   }
-  const [state, dispatch] = useReducer<
-    (state: IFormState, action: IAction) => IFormState
-  >(reducer, initState)
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    dispatch({
-      type: ACTION_TYPE?.INPUT_CHANGE,
-      payload: { [e.target.name]: e.target.value }
-    })
+  return {
+    data,
+    handleChange,
+    handleSubmit,
+    errors
   }
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    dispatch({ type: ACTION_TYPE?.SUBMIT })
-  }
-
-  useEffect(() => {
-    const validateErrs = state?.validationError || {}
-    if (
-      Object?.values(validateErrs)?.find((err: any) => err.length) &&
-      state?.isSubmiting
-    )
-      dispatch({ type: ACTION_TYPE?.STOP_SUBMIT })
-    if (
-      !Object?.values(validateErrs)?.find((err: any) => err.length) &&
-      state?.isSubmiting
-    )
-      callback(state?.input)
-  }, [state.isSubmiting])
-
-  return { state, handleChange, handleSubmit }
 }

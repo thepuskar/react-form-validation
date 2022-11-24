@@ -1,11 +1,10 @@
 import './App.css'
-import { useForm } from 'hooks'
-import { RegisterForm } from 'components'
-import { IFormData } from 'interface'
+import { RegisterForm, LoginForm } from 'components'
 
 function App() {
   return (
     <div className='App'>
+      <LoginForm />
       <RegisterForm />
     </div>
   )

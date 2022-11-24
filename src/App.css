@@ -5,6 +5,15 @@
   justify-content: center;
   align-items: center;
 }
+.App {
+  border: 2px solid red;
+  display: flex;
+  justify-content: space-around;
+}
+h1 {
+  font-size: 1em;
+  padding: 0.7em 0.5em;
+}
 form {
   padding: 0.5125em;
   border-radius: 0.4em;
