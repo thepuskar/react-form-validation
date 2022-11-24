@@ -1,16 +1,17 @@
 import './App.css'
-import { useForm } from './hooks'
+import { useForm } from 'hooks'
 import { Input } from './components/Input'
+import { IFormData } from 'interface'
 
 function App() {
-  const onSubmit = (values: any) => {
+  const onSubmit = (values: IFormData) => {
     console.log('data', values)
   }
   const { state, handleChange, handleSubmit } = useForm(onSubmit)
 
   return (
     <div className='App'>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(event) => handleSubmit(event)}>
         <Input
           handleChange={handleChange}
           type='text'
@@ -43,7 +44,7 @@ function App() {
           state={state}
         />
 
-        <button type='submit'>Submut</button>
+        <button type='submit'>Submit</button>
       </form>
     </div>
   )

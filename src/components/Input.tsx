@@ -1,7 +1,7 @@
-import { FormEvent } from 'react'
+import { ChangeEvent } from 'react'
 
 interface IInputProps {
-  handleChange: (event: FormEvent<HTMLInputElement>) => void
+  handleChange: (event: ChangeEvent<HTMLInputElement>) => void
   state: any
   name: string
   type: string
@@ -9,8 +9,9 @@ interface IInputProps {
 }
 
 export const Input = (props: IInputProps) => {
+  console.log(props?.state)
   return (
-    <>
+    <div className='input-field'>
       <input
         onChange={props?.handleChange}
         value={props?.state.input?.[props?.name]}
@@ -19,8 +20,8 @@ export const Input = (props: IInputProps) => {
         placeholder={props?.placeholder}
       />
       <span className='validation-errors'>
-        {props?.state.validationErrs?.[props?.name]}
+        {props?.state.validationError?.[props?.name]}
       </span>
-    </>
+    </div>
   )
 }
